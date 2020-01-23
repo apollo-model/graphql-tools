@@ -43,7 +43,7 @@ export interface IResolverOptions<TSource = any, TContext = any, TArgs = any> {
 
 export type Transform = {
   transformSchema?: (schema: GraphQLSchema) => GraphQLSchema;
-  transformRequest?: (originalRequest: Request) => Request;
+  transformRequest?: (originalRequest: Request, options?: IDelegateToSchemaOptions) => Request;
   transformResult?: (result: Result) => Result;
 };
 
@@ -89,18 +89,18 @@ export type ITypedef = (() => ITypedef[]) | string | DocumentNode | ASTNode;
 export type ITypeDefinitions = ITypedef | ITypedef[];
 export type IResolverObject<TSource = any, TContext = any, TArgs = any> = {
   [key: string]:
-    | IFieldResolver<TSource, TContext, TArgs>
-    | IResolverOptions<TSource, TContext>
-    | IResolverObject<TSource, TContext>;
+  | IFieldResolver<TSource, TContext, TArgs>
+  | IResolverOptions<TSource, TContext>
+  | IResolverObject<TSource, TContext>;
 };
 export type IEnumResolver = { [key: string]: string | number };
 export interface IResolvers<TSource = any, TContext = any> {
   [key: string]:
-    | (() => any)
-    | IResolverObject<TSource, TContext>
-    | IResolverOptions<TSource, TContext>
-    | GraphQLScalarType
-    | IEnumResolver;
+  | (() => any)
+  | IResolverObject<TSource, TContext>
+  | IResolverOptions<TSource, TContext>
+  | GraphQLScalarType
+  | IEnumResolver;
 }
 export type IResolversParameter =
   | Array<IResolvers | ((mergeInfo: MergeInfo) => IResolvers)>
@@ -112,7 +112,7 @@ export interface ILogger {
 }
 
 export interface IConnectorCls<TContext = any> {
-  new (context?: TContext): any;
+  new(context?: TContext): any;
 }
 export type IConnectorFn<TContext = any> = (context?: TContext) => any;
 export type IConnector<TContext = any> =

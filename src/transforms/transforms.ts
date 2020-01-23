@@ -1,5 +1,5 @@
 import { GraphQLSchema } from 'graphql';
-import { Request, Result, Transform } from '../Interfaces';
+import { Request, Result, Transform, IDelegateToSchemaOptions } from '../Interfaces';
 
 export { Transform };
 
@@ -17,11 +17,12 @@ export function applySchemaTransforms(
 export function applyRequestTransforms(
   originalRequest: Request,
   transforms: Array<Transform>,
+  options: IDelegateToSchemaOptions,
 ): Request {
   return transforms.reduce(
     (request: Request, transform: Transform) =>
       transform.transformRequest
-        ? transform.transformRequest(request)
+        ? transform.transformRequest(request, options)
         : request,
 
     originalRequest,
@@ -45,8 +46,8 @@ export function composeTransforms(...transforms: Array<Transform>): Transform {
     transformSchema(originalSchema: GraphQLSchema): GraphQLSchema {
       return applySchemaTransforms(originalSchema, transforms);
     },
-    transformRequest(originalRequest: Request): Request {
-      return applyRequestTransforms(originalRequest, reverseTransforms);
+    transformRequest(originalRequest: Request, options: IDelegateToSchemaOptions): Request {
+      return applyRequestTransforms(originalRequest, reverseTransforms, options);
     },
     transformResult(result: Result): Result {
       return applyResultTransforms(result, reverseTransforms);

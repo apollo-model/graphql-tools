@@ -40,7 +40,7 @@ export default function delegateToSchema(
   if (options instanceof GraphQLSchema) {
     throw new Error(
       'Passing positional arguments to delegateToSchema is a deprecated. ' +
-        'Please pass named parameters instead.',
+      'Please pass named parameters instead.',
     );
   }
   return delegateToSchemaImplementation(options);
@@ -91,7 +91,7 @@ async function delegateToSchemaImplementation(
     );
   }
 
-  const processedRequest = applyRequestTransforms(rawRequest, transforms);
+  const processedRequest = applyRequestTransforms(rawRequest, transforms, options);
 
   if (!options.skipValidation) {
     const errors = validate(options.schema, processedRequest.document);
