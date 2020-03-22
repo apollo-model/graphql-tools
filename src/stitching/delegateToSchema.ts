@@ -91,7 +91,7 @@ async function delegateToSchemaImplementation(
     );
   }
 
-  const processedRequest = applyRequestTransforms(rawRequest, transforms, options);
+  const processedRequest = await applyRequestTransforms(rawRequest, transforms, options);
 
   if (!options.skipValidation) {
     const errors = validate(options.schema, processedRequest.document);
