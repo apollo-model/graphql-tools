@@ -43,7 +43,7 @@ export interface IResolverOptions<TSource = any, TContext = any, TArgs = any> {
 
 export type Transform = {
   transformSchema?: (schema: GraphQLSchema) => GraphQLSchema;
-  transformRequest?: (originalRequest: Request, options?: IDelegateToSchemaOptions) => Request;
+  transformRequest?: (originalRequest: Request, options?: IDelegateToSchemaOptions) => Request | Promise<Request>;
   transformResult?: (result: Result) => Result;
 };
 

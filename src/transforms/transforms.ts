@@ -14,17 +14,16 @@ export function applySchemaTransforms(
   );
 }
 
-export function applyRequestTransforms(
+export async function applyRequestTransforms(
   originalRequest: Request,
   transforms: Array<Transform>,
   options: IDelegateToSchemaOptions,
-): Request {
+): Promise<Request> {
   return transforms.reduce(
-    (request: Request, transform: Transform) =>
+    async (request: Request | Promise<Request>, transform: Transform) =>
       transform.transformRequest
-        ? transform.transformRequest(request, options)
+        ? transform.transformRequest(await request, options)
         : request,
-
     originalRequest,
   );
 }
@@ -46,7 +45,7 @@ export function composeTransforms(...transforms: Array<Transform>): Transform {
     transformSchema(originalSchema: GraphQLSchema): GraphQLSchema {
       return applySchemaTransforms(originalSchema, transforms);
     },
-    transformRequest(originalRequest: Request, options: IDelegateToSchemaOptions): Request {
+    transformRequest(originalRequest: Request, options: IDelegateToSchemaOptions): Promise<Request> {
       return applyRequestTransforms(originalRequest, reverseTransforms, options);
     },
     transformResult(result: Result): Result {
